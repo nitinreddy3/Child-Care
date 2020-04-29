@@ -1,70 +1,17 @@
 import 'package:flutter/material.dart';
+import 'custom_widgets/home_page.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyButton(),
-    );
-  }
-}
-
-class MyButton extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    // TODO: implement createState
-    return MyButtonState();
-  }
-}
-
-class MyButtonState extends State<MyButton> {
-  int counter = 0;
-  List<String> spanishNumbers = [
-    "uno",
-    "dos",
-    "tres",
-    "cuatro",
-    "cinco",
-    "seis",
-    "seite",
-    "ocho",
-    "nueve",
-    "dietz",
-  ];
-
-  String defaultText = "Spanish numbers";
-
-  @override
-  Widget build(BuildContext ctx) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Stateful App'),
-        backgroundColor: Colors.black,
+      title: 'Dice App',
+      theme: ThemeData(
+        primaryColor: Colors.amber,
       ),
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                defaultText,
-                style: TextStyle(
-                  fontSize: 30.0,
-                ),
-              ),
-            ],
-          ),
-        ),
-      )
+      home: HomePage(),
     );
   }
 }
