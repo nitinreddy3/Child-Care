@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
 
 class MyButton extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
+  MyButtonState createState() {
     // TODO: implement createState
     return MyButtonState();
   }
@@ -43,6 +43,20 @@ class MyButtonState extends State<MyButton> {
 
   String defaultText = "Spanish numbers";
 
+  void _displaySNumbers() {
+    if (counter < 9) {
+      setState(() {
+        counter += 1;
+        defaultText = spanishNumbers[counter];
+      });
+    } else {
+      setState(() {
+        counter = 0;
+        defaultText = "Spanish numbers";
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext ctx) {
     return Scaffold(
@@ -61,10 +75,24 @@ class MyButtonState extends State<MyButton> {
                   fontSize: 30.0,
                 ),
               ),
+              Padding(
+                padding: EdgeInsets.all(10.0),
+              ),
+              Text(
+                '$counter',
+                style: TextStyle(
+                  fontSize: 20.0,
+                ),
+              ),
             ],
           ),
         ),
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _displaySNumbers,
+        child: Icon(Icons.add),
+        backgroundColor: Colors.orange,
+      ),
     );
   }
 }
