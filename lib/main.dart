@@ -1,97 +1,81 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyButton(),
+      title: 'BG Changer',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Random Background'),
+        ),
+        body: HomePage(),
+      ),
     );
   }
 }
 
-class MyButton extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  MyButtonState createState() {
-    // TODO: implement createState
-    return MyButtonState();
-  }
+  _HomePageState createState() => _HomePageState();
 }
 
-class MyButtonState extends State<MyButton> {
-  int counter = 0;
-  List<String> spanishNumbers = [
-    "uno",
-    "dos",
-    "tres",
-    "cuatro",
-    "cinco",
-    "seis",
-    "seite",
-    "ocho",
-    "nueve",
-    "dietz",
+class _HomePageState extends State<HomePage> {
+  var colors = [
+    Colors.amber,
+    Colors.black,
+    Colors.blue,
+    Colors.red,
+    Colors.green,
+    Colors.pink,
+    Colors.orange,
   ];
 
-  String defaultText = "Spanish numbers";
+  var btnColors = [
+    Colors.amberAccent,
+    Colors.brown,
+    Colors.teal,
+    Colors.green,
+    Colors.pink,
+    Colors.orange,
+  ];
 
-  void _displaySNumbers() {
-    if (counter < 9) {
-      setState(() {
-        counter += 1;
-        defaultText = spanishNumbers[counter];
-      });
-    } else {
-      setState(() {
-        counter = 0;
-        defaultText = "Spanish numbers";
-      });
-    }
+  var currentColor = Colors.white;
+  var currentBtnColor = Colors.black;
+
+  changeColor() {
+    var rnd = Random().nextInt(6);
+    var btnRnd = Random().nextInt(5);
+    setState(() {
+      currentColor = colors[rnd];
+      currentBtnColor = btnColors[btnRnd];
+    });
   }
 
   @override
-  Widget build(BuildContext ctx) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Stateful App'),
-        backgroundColor: Colors.black,
-      ),
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                defaultText,
-                style: TextStyle(
-                  fontSize: 30.0,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10.0),
-              ),
-              Text(
-                '$counter',
-                style: TextStyle(
-                  fontSize: 20.0,
-                ),
-              ),
-            ],
+  Widget build(BuildContext context) {
+    return Container(
+      color: currentColor,
+      child: Center(
+        child: RaisedButton(
+          color: currentBtnColor,
+          child: Text(
+            'Change Color',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          onPressed: changeColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _displaySNumbers,
-        child: Icon(Icons.add),
-        backgroundColor: Colors.orange,
       ),
     );
   }
