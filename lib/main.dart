@@ -10,13 +10,7 @@ class MyApp extends StatelessWidget {
       title: 'Tic Toc To',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.purple),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text('Tic Tac Toe'),
-          ),
-        ),
-      ),
+      home: HomePage(),
     );
   }
 }
