@@ -7,113 +7,140 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  AssetImage one = AssetImage("images/one.png");
-  AssetImage two = AssetImage("images/second.png");
-  AssetImage three = AssetImage("images/three.png");
-  AssetImage four = AssetImage("images/four.png");
-  AssetImage five = AssetImage("images/five.png");
-  AssetImage six = AssetImage("images/six.png");
+  //TODO: link up images
+  AssetImage cross = AssetImage("images/cross.png");
+  AssetImage circle = AssetImage("images/circle.png");
+  AssetImage edit = AssetImage("images/edit.png");
+  bool isCross = true;
+  String message;
+  List<String> gameState;
 
-  AssetImage diceImage1;
-  AssetImage diceImage2;
-
+  //TODO: initialize the state of box with empty
   @override
   void initState() {
     super.initState();
     setState(() {
-      diceImage1 = one;
-      diceImage2 = two;
+      this.gameState = [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+      ];
+      this.message = "";
     });
   }
 
-  void rollDice() {
-    int random = (1 + Random().nextInt(6));
-
-    AssetImage newImage1;
-    AssetImage newImage2;
-
-    switch (random) {
-      case 1:
-        newImage1 = one;
-        newImage2 = six;
-        break;
-      case 2:
-        newImage1 = two;
-        newImage2 = five;
-        break;
-      case 3:
-        newImage1 = three;
-        newImage2 = four;
-        break;
-      case 4:
-        newImage1 = four;
-        newImage2 = three;
-        break;
-      case 5:
-        newImage1 = five;
-        newImage2 = two;
-        break;
-      case 6:
-        newImage1 = six;
-        newImage2 = one;
-        break;
-      default:
+  //TODO: playgame method
+  playGame(int index) {
+    if (this.gameState[index] == "empty") {
+      setState(() {
+        if (this.isCross) {
+          this.gameState[index] = "cross";
+        } else {
+          this.gameState[index] = "circle";
+        }
+        this.isCross = !this.isCross;
+        this.checkWin();
+      });
     }
+  }
 
+  //TODO: Reset game method
+  reseGame() {
     setState(() {
-      diceImage1 = newImage1;
-      diceImage2 = newImage2;
+      this.gameState = [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+      ];
+      this.message = "";
     });
+  }
+
+  //TODO: get image method
+  AssetImage getImage(String value) {
+    switch (value) {
+      case ('empty'):
+        return edit;
+        break;
+      case ('cross'):
+        return cross;
+        break;
+      case ('circle'):
+        return circle;
+        break;
+    }
+  }
+
+  checkWin() {
+    if ((gameState[0] != 'empty') &&
+        (gameState[0] == gameState[1]) &&
+        (gameState[1] == gameState[2])) {
+      setState(() {
+        this.message = '${this.gameState[0]} Wins';
+      });
+    } else if ((gameState[3] != 'empty') &&
+        (gameState[3] == gameState[4]) &&
+        (gameState[4] == gameState[5])) {
+      setState(() {
+        this.message = '${this.gameState[3]} Wins';
+      });
+    } else if ((gameState[6] != 'empty') &&
+        (gameState[6] == gameState[7]) &&
+        (gameState[7] == gameState[8])) {
+      setState(() {
+        this.message = '${this.gameState[6]} Wins';
+      });
+    } else if ((gameState[0] != 'empty') &&
+        (gameState[0] == gameState[3]) &&
+        (gameState[6] == gameState[6])) {
+      setState(() {
+        this.message = '${this.gameState[0]} Wins';
+      });
+    } else if ((gameState[1] != 'empty') &&
+        (gameState[1] == gameState[4]) &&
+        (gameState[4] == gameState[7])) {
+      setState(() {
+        this.message = '${this.gameState[1]} Wins';
+      });
+    }  else if ((gameState[2] != 'empty') &&
+        (gameState[2] == gameState[5]) &&
+        (gameState[5] == gameState[8])) {
+      setState(() {
+        this.message = '${this.gameState[2]} Wins';
+      });
+    }else if ((gameState[0] != 'empty') &&
+        (gameState[0] == gameState[4]) &&
+        (gameState[4] == gameState[8])) {
+      setState(() {
+        this.message = '${this.gameState[0]} Wins';
+      });
+    }else if ((gameState[2] != 'empty') &&
+        (gameState[2] == gameState[4]) &&
+        (gameState[6] == gameState[6])) {
+      setState(() {
+        this.message = '${this.gameState[2]} Wins';
+      });
+    } else if (!gameState.contains('empty')) {
+      setState(() {
+        this.message = "Game Draw";
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text('Dice Roller'),
-          ),
-        ),
-        body: Container(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image(
-                  image: diceImage1,
-                  width: 100.0,
-                  height: 100.0,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 5.0),
-                ),
-                Image(
-                  image: diceImage2,
-                  width: 100.0,
-                  height: 100.0,
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 100.0),
-                  child: RaisedButton(
-                    onPressed: rollDice,
-                    color: Colors.yellow,
-                    padding: EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0),
-                    child: Text(
-                      'Roll the dice',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
+    return Container();
   }
 }

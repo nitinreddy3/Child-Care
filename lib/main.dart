@@ -7,11 +7,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Dice App',
-      theme: ThemeData(
-        primaryColor: Colors.amber,
+      title: 'Tic Toc To',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.purple),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Center(
+            child: Text('Tic Tac Toe'),
+          ),
+        ),
       ),
-      home: HomePage(),
     );
   }
 }
