@@ -7,113 +7,206 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  AssetImage one = AssetImage("images/one.png");
-  AssetImage two = AssetImage("images/second.png");
-  AssetImage three = AssetImage("images/three.png");
-  AssetImage four = AssetImage("images/four.png");
-  AssetImage five = AssetImage("images/five.png");
-  AssetImage six = AssetImage("images/six.png");
+  //TODO: link up images
+  AssetImage cross = AssetImage("images/cross.png");
+  AssetImage circle = AssetImage("images/circle.png");
+  AssetImage edit = AssetImage("images/edit.png");
+  bool isCross = true;
+  String message;
+  List<String> gameState;
 
-  AssetImage diceImage1;
-  AssetImage diceImage2;
-
+  //TODO: initialize the state of box with empty
   @override
   void initState() {
     super.initState();
     setState(() {
-      diceImage1 = one;
-      diceImage2 = two;
+      this.gameState = [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+      ];
+      this.message = "";
     });
   }
 
-  void rollDice() {
-    int random = (1 + Random().nextInt(6));
-
-    AssetImage newImage1;
-    AssetImage newImage2;
-
-    switch (random) {
-      case 1:
-        newImage1 = one;
-        newImage2 = six;
-        break;
-      case 2:
-        newImage1 = two;
-        newImage2 = five;
-        break;
-      case 3:
-        newImage1 = three;
-        newImage2 = four;
-        break;
-      case 4:
-        newImage1 = four;
-        newImage2 = three;
-        break;
-      case 5:
-        newImage1 = five;
-        newImage2 = two;
-        break;
-      case 6:
-        newImage1 = six;
-        newImage2 = one;
-        break;
-      default:
+  //TODO: playgame method
+  playGame(int index) {
+    if (this.gameState[index] == "empty") {
+      setState(() {
+        if (this.isCross) {
+          this.gameState[index] = "cross";
+        } else {
+          this.gameState[index] = "circle";
+        }
+        this.isCross = !this.isCross;
+        this.checkWin();
+      });
     }
+  }
 
+  //TODO: Reset game method
+  reseGame() {
     setState(() {
-      diceImage1 = newImage1;
-      diceImage2 = newImage2;
+      this.gameState = [
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+        "empty",
+      ];
+      this.message = "";
     });
+  }
+
+  //TODO: get image method
+  AssetImage getImage(String value) {
+    switch (value) {
+      case ('empty'):
+        return edit;
+        break;
+      case ('cross'):
+        return cross;
+        break;
+      case ('circle'):
+        return circle;
+        break;
+    }
+  }
+
+  checkWin() {
+    if ((gameState[0] != 'empty') &&
+        (gameState[0] == gameState[1]) &&
+        (gameState[1] == gameState[2])) {
+      setState(() {
+        this.message = '${this.gameState[0]} wins';
+      });
+    } else if ((gameState[3] != 'empty') &&
+        (gameState[3] == gameState[4]) &&
+        (gameState[4] == gameState[5])) {
+      setState(() {
+        this.message = '${this.gameState[3]} wins';
+      });
+    } else if ((gameState[6] != 'empty') &&
+        (gameState[6] == gameState[7]) &&
+        (gameState[7] == gameState[8])) {
+      setState(() {
+        this.message = '${this.gameState[6]} wins';
+      });
+    } else if ((gameState[0] != 'empty') &&
+        (gameState[0] == gameState[3]) &&
+        (gameState[6] == gameState[6])) {
+      setState(() {
+        this.message = '${this.gameState[0]} wins';
+      });
+    } else if ((gameState[1] != 'empty') &&
+        (gameState[1] == gameState[4]) &&
+        (gameState[4] == gameState[7])) {
+      setState(() {
+        this.message = '${this.gameState[1]} wins';
+      });
+    } else if ((gameState[2] != 'empty') &&
+        (gameState[2] == gameState[5]) &&
+        (gameState[5] == gameState[8])) {
+      setState(() {
+        this.message = '${this.gameState[2]} wins';
+      });
+    } else if ((gameState[0] != 'empty') &&
+        (gameState[0] == gameState[4]) &&
+        (gameState[4] == gameState[8])) {
+      setState(() {
+        this.message = '${this.gameState[0]} wins';
+      });
+    } else if ((gameState[2] != 'empty') &&
+        (gameState[2] == gameState[4]) &&
+        (gameState[6] == gameState[6])) {
+      setState(() {
+        this.message = '${this.gameState[2]} wins';
+      });
+    } else if (!gameState.contains('empty')) {
+      setState(() {
+        this.message = "Game Draw";
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Center(
-            child: Text('Dice Roller'),
-          ),
+      appBar: AppBar(
+        title: Center(
+          child: Text('Tic Tac Toe'),
         ),
-        body: Container(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Image(
-                  image: diceImage1,
-                  width: 100.0,
-                  height: 100.0,
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: GridView.builder(
+              padding: EdgeInsets.all(15.0),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 1.0,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+              ),
+              itemCount: this.gameState.length,
+              itemBuilder: (context, i) => SizedBox(
+                width: 100.0,
+                height: 100.0,
+                child: MaterialButton(
+                  onPressed: () {
+                    this.playGame(i);
+                  },
+                  child: Image(image: this.getImage(this.gameState[i])),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: 5.0),
-                ),
-                Image(
-                  image: diceImage2,
-                  width: 100.0,
-                  height: 100.0,
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 100.0),
-                  child: RaisedButton(
-                    onPressed: rollDice,
-                    color: Colors.yellow,
-                    padding: EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0),
-                    child: Text(
-                      'Roll the dice',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      );
+          Container(
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+              this.message,
+              style: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          MaterialButton(
+            onPressed: () {
+              this.reseGame();
+            },
+            color: Colors.purple,
+            minWidth: 300.0,
+            height: 50.0,
+            child: Text(
+              'Reset Game',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(20.0),
+            child: Text(
+              "NKR",
+              style: TextStyle(fontSize: 10.0),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
